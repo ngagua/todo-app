@@ -12,9 +12,7 @@
       <div class="todos__select-level">
         <select name="select-level" class="options" [(ngModel)]="selectedValue">
           <option value="" selected hidden>Select</option>
-          <option value="Easy">Easy</option>
-          <option value="Medium">Medium</option>
-          <option value="Difficult">Difficult</option>
+          <option *ngFor="let n of selects">{{ n }}</option>
         </select>
       </div>
       <button
