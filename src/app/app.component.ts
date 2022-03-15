@@ -15,7 +15,7 @@ export class AppComponent {
   inProgress: Todo[] = []
   done: Todo[] = []
   inputTodo: string = "";
-  selectedValue = null;
+  selectedValue:string = "";
 
   addTodo() {
     this.todos.push({
