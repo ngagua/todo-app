@@ -7,16 +7,25 @@
         name="inputTodo"
         class="todo__input"
         placeholder="Task Name"
-        [(ngModel)]="inputTodo"
+        [(ngModel)]="task.content"
       />
       <div class="todos__select-level">
-        <select name="select-level" class="options" [(ngModel)]="selectedValue">
-          <option value="" selected hidden>Select</option>
-          <option *ngFor="let n of selects">{{ n }}</option>
+        <select
+          name="select-level"
+          class="options"
+          [(ngModel)]="task.difficulty"
+        >
+          <option [ngValue]="undefined" selected hidden>Select</option>
+          <option
+            [ngValue]="selected"
+            *ngFor="let selected of difficultyOptions"
+          >
+            {{ selected }}
+          </option>
         </select>
       </div>
       <button
-        (click)="addTodo()"
+        (click)="addTask()"
         class="todos__button"
         type="submit"
         value="add todo"
@@ -25,52 +34,35 @@
       </button>
     </nav>
   </header>
-  <div class="todos__sections">
-    <section class="todos_To-do">
-      <div class="todos__title">
-        <i class="fa-solid fa-bars"></i>
-        <p>To-do</p>
-      </div>
-      <div *ngFor="let todo of todos; let i = index" class="todos__content">
-        <div class="id">{{ i + 1 }}.</div>
-        <div class="content">{{ todo.content }}</div>
-        <div>{{ selectedValue }}</div>
-        <button (click)="moveToProgress(i)" class="todos__move-to-inprogress">
-          >
-        </button>
-        <button (click)="removeTask(i)" class="todos__remove">X</button>
-      </div>
-    </section>
 
-    <section class="todos_in-progress">
-      <div class="todos__title">
-        <i class="fa-solid fa-bars"></i>
-        <p>In progress</p>
-      </div>
-      <div
-        *ngFor="let todo of inProgress; let i = index"
-        class="todos__content"
-      >
-        <div class="id">{{ i + 1 }}.</div>
-        <div class="content">{{ todo.content }}</div>
-        <div>{{ selectedValue }}</div>
-        <button (click)="ProgressTotodo(i)" class="todos__move-to-inprogress">
-          <
-        </button>
-        <button (click)="moveToDone(i)" class="todos__remove">></button>
-      </div>
-    </section>
-    <section class="todos_Done">
-      <div class="todos__title">
-        <i class="fa-solid fa-bars"></i>
-        <p>Done</p>
-      </div>
-      <div *ngFor="let todo of done; let i = index" class="todos__content">
-        <div class="id">{{ i + 1 }}.</div>
-        <div class="content">{{ todo.content }}</div>
-        <div>{{ selectedValue }}</div>
-        <button (click)="doneToProgress(i)" class="todos__remove"><</button>
-      </div>
-    </section>
+  <i class="fa fa-user fa-5x"></i>
+
+  <div class="taskbox">
+    <app-taskbox
+      [tasks]="todos"
+      title="Todo"
+      (remove)="deleteUserHandler($event)"
+      (movetodo)="movetodoHandler($event)"
+      (moveinprogress)="moveinprogressHandler($event)"
+      (movedone)="movedoneHandler($event)"
+    ></app-taskbox>
+
+    <app-taskbox
+      [tasks]="inprogresses"
+      title="Inprogress"
+      (remove)="deleteUserHandler($event)"
+      (movetodo)="movetodoHandler($event)"
+      (moveinprogress)="moveinprogressHandler($event)"
+      (movedone)="movedoneHandler($event)"
+    ></app-taskbox>
+
+    <app-taskbox
+      [tasks]="dones"
+      title="Done"
+      (remove)="deleteUserHandler($event)"
+      (movetodo)="movetodoHandler($event)"
+      (moveinprogress)="moveinprogressHandler($event)"
+      (movedone)="movedoneHandler($event)"
+    ></app-taskbox>
   </div>
 </div>

@@ -1,0 +1,23 @@
+<div class="task-container">
+  <div class="id">{{ index + 1 }}.</div>
+  <div class="content">{{ task.content }}</div>
+  <div>{{ task.difficulty }}</div>
+
+  <ng-container *ngIf="task.state == states.Todo">
+    <button (click)="moveToProgress(index)" class="todos__move-to-inprogress">
+      >
+    </button>
+    <button (click)="removeTask(index)" class="todos__remove">X</button>
+  </ng-container>
+
+  <ng-container *ngIf="task.state == states.InProgress">
+    <button (click)="moveTotodo(index)" class="todos__move-to-inprogress">
+      <
+    </button>
+    <button (click)="moveToDone(index)" class="todos__remove">></button>
+  </ng-container>
+
+  <ng-container *ngIf="task.state == states.Done">
+    <button (click)="moveToProgress(index)" class="todos__remove"><</button>
+  </ng-container>
+</div>

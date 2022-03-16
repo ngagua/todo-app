@@ -1,8 +1,23 @@
 import { Component } from '@angular/core';
-export interface Todo {
+export interface Task {
   content: string,
-  completed: boolean
+  difficulty: Difficulty | undefined,
+  state: States | undefined,
+  id: number | undefined
 }
+
+export enum Difficulty {
+  Easy = "Easy",
+  Medium = "Medium",
+  Difficult = "Difficult",
+
+}
+export enum States {
+  Todo = "Todo",
+  InProgress = "inProgress",
+  Done = "Done",
+}
+
 
 
 @Component({
@@ -11,44 +26,90 @@ export interface Todo {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  todos: Todo[] = []
-  inProgress: Todo[] = []
-  done: Todo[] = []
-  inputTodo: string = "";
-  selects = ["Easy", "Medium", "Difficult"];
-  selectedValue:string = "";
+  difficultyOptions = [
+    Difficulty.Easy,
+    Difficulty.Medium,
+    Difficulty.Difficult
+  ]
 
-  addTodo() {
-    this.todos.push({
-      content: this.inputTodo,
-      completed: false
-    });
-    this.inputTodo = "";
-    
+  task: Task = {
+    content: "",
+    difficulty: undefined,
+    state: undefined,
+    id: undefined
   }
-removeTask(id:number) {
-  this.todos = this.todos.filter((task, index) => index !==id);
+
+
+
+  tasksArray: Task[] = []
   
-}
+  todos: Task[] = [];
+  inprogresses: Task[] = []
+  dones: Task[] = []
 
-  moveToProgress (id:number) {
-    let inprog = this.todos.filter((task, index) => index ==id);
-    this.inProgress.push(...inprog);
-    this.todos = this.todos.filter((task, index) => index !==id);
+
+  difficulty = Difficulty;
+  states = States;
+
+  
+  addTask() {
+    if (!this.task.content || !this.task.difficulty) {
+      return
+    }
+
+    this.tasksArray.push({
+      content: this.task.content,
+      difficulty: this.task.difficulty,
+      state: States.Todo,
+      id: this.tasksArray.length +1
+    });
+    this.todos = this.tasksArray.filter(x => x.state == this.states.Todo)
+    this.inprogresses = this.tasksArray.filter(x => x.state == this.states.InProgress)
+    this.dones = this.tasksArray.filter(x => x.state == this.states.Done)
+    this.task = {
+      content: "",
+      difficulty: undefined,
+      state: undefined,
+      id: 0,
+    }
+
   }
-  ProgressTotodo (id:number) {
-    let inprog = this.inProgress.filter((task, index) => index ==id);
-    this.todos.push(...inprog);
-    this.inProgress = this.inProgress.filter((task, index) => index !==id);
+
+  deleteUserHandler(id: number) {
+    this.tasksArray = this.tasksArray.filter((x) => x.id !== id);
+    this.todos = this.tasksArray.filter(x => x.state == this.states.Todo)
+    this.inprogresses = this.tasksArray.filter(x => x.state == this.states.InProgress)
+    this.dones = this.tasksArray.filter(x => x.state == this.states.Done)
+    console.log("dsasds")
+  } 
+  movetodoHandler(id:number){
+    for (let x of this.tasksArray) {
+      if (x.id == id) {
+        x.state = this.states.Todo;
+      }
+    }
+    this.todos = this.tasksArray.filter(x => x.state == this.states.Todo)
+    this.inprogresses = this.tasksArray.filter(x => x.state == this.states.InProgress)
+    this.dones = this.tasksArray.filter(x => x.state == this.states.Done)
   }
-  moveToDone (id:number) {
-    let don = this.inProgress.filter((task, index) => index ==id);
-    this.done.push(...don);
-    this.inProgress = this.inProgress.filter((task, index) => index !==id);
+  moveinprogressHandler(id:number){
+    for (let x of this.tasksArray) {
+      if (x.id == id) {
+        x.state = this.states.InProgress;
+      }
+      }
+      this.todos = this.tasksArray.filter(x => x.state == this.states.Todo)
+      this.inprogresses = this.tasksArray.filter(x => x.state == this.states.InProgress)
+      this.dones = this.tasksArray.filter(x => x.state == this.states.Done)
   }
-  doneToProgress (id:number) {
-    let don = this.done.filter((task, index) => index ==id);
-    this.inProgress.push(...don);
-    this.done = this.done.filter((task, index) => index !==id);
+  movedoneHandler(id:number){
+    for (let x of this.tasksArray) {
+      if (x.id == id) {
+        x.state = this.states.Done;
+      }
+    }
+    this.todos = this.tasksArray.filter(x => x.state == this.states.Todo)
+    this.inprogresses = this.tasksArray.filter(x => x.state == this.states.InProgress)
+    this.dones = this.tasksArray.filter(x => x.state == this.states.Done)
   }
 }
